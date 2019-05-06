@@ -1,11 +1,11 @@
-//CRUD em C
+//CRUD em C usando struct, ponteiro e alocação dinamica
 /*Descrição do trabalho:
 Crie um sistema de cadastro para a Uninove no qual seja possível 
 inserir, consultar, alterar e deletar (CRUD) alunos cadastrados. 
 O usuário cadastra o aluno informando o ra, nome e curso. 
 Na consulta o usuário deve ter a possibilidade de consultar 
 todos ou pesquisa por um alunos específico. 
-Para modificar ou deletar o usuário deve apenas informar o RA.
+Para alterar ou deletar o usuário deve apenas informar o RA.
 
 OBS: O dados devem ser salvos em uma lista encadeada, 
 utilizando registros(structs) e alocação dinâmica.*/
@@ -17,7 +17,8 @@ utilizando registros(structs) e alocação dinâmica.*/
 //struct aluno com os atributos
 typedef struct Aluno{
 	//atributos
-	char nome[20], curso;
+	struct Aluno *anterior;
+	char nome[20], curso[50];
 	int ra;
 }t_aluno;
 
@@ -26,6 +27,10 @@ void inserir(void);
 void consultar(void);
 void alterar(void);
 void deletar(void);
+
+//variaveis globais do tipo struct aluno
+t_aluno *p = NULL;
+t_aluno *anterior = NULL;
 
 int main(){
 	//variaveis locais
@@ -36,7 +41,7 @@ int main(){
 	printf("1 - Inserir\n");
 	printf("2 - Consultar\n");
 	printf("3 - Alterar\n");
-	printf("4 - Inserir\n");
+	printf("4 - Deletar\n");
 	printf("5 - Sair\n");
 	printf("\nOpcao> ");
 	scanf("%i", &op);
@@ -69,37 +74,66 @@ int main(){
 //métodos 
 void inserir(void){
 	system("cls");
+	//alocando memoria para a variavel que sera inserida
+	p = (t_aluno *) malloc(sizeof(t_aluno));
 	
-	//apagar os prints e escrever o método
-	printf("Inserindo elementos\n");
-	printf("testando menu");
-	//apagar os prints e escrever o método
+	//ra, nome e curso
+	printf("Digite seu RA: ");
+	scanf("%d", &p->ra);
+	printf("Digite seu nome: ");
+	scanf("%s", &p->nome);
+	printf("Digite seu curso: ");
+	scanf("%s", &p->curso);
+	
+	//ligando as structs
+	p->anterior = anterior;
+	anterior = p;
+	
+	printf("\n\n\nAluno cadastrado com sucesso\n");
+	system("pause");
+	system("cls");
+	//limpando a tela e voltando para o menu principal
+	main();
 }
 
 void consultar(void){
-	system("cls");
 	
-	//apagar os prints e escrever o método
-	printf("consultando elementos\n");
-	printf("testando menu");
-	//apagar os prints e escrever o método
 }
 
 void alterar(void){
-	system("cls");
 	
-	//apagar os prints e escrever o método
-	printf("alterando elementos\n");
-	printf("testando menu");
-	//apagar os prints e escrever o método
 }
 
 void deletar(void){
 	system("cls");
+	//RA que o usuario quer deletar
+	int n;
+	printf("Digite o RA que deseja deletar: ");
+	scanf("%i", &n);
 	
-	//apagar os prints e escrever o método
-	printf("deletando elementos\n");
-	printf("testando menu");
-	//apagar os prints e escrever o método
+	do{
+		if(p->ra == n){
+			//deleta a struct da memoria
+			free(p);
+			printf("\n\n\nAluno deletado com sucesso\n");
+			system("pause");
+			system("cls");
+			//limpando a tela e voltando para o menu principal
+			main();
+		}
+		
+		//Quando ele nao acha o RA o programa trava.
+		//unica coisa que falta pra finalizar o metodo
+		if (p->anterior==NULL){		
+			printf("\n\n\nERRO 404: RA nao existe no sistema\n");
+			system("pause");
+			system("cls");
+			//limpando a tela e voltando para o menu principal
+			main();
+		}
+		
+		//vai pra proxima struct
+		p = p->anterior;
+	}while(1);
 }
 
