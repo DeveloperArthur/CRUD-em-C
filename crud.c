@@ -33,42 +33,44 @@ t_aluno *p = NULL;
 t_aluno *anterior = NULL;
 
 int main(){
-	//variaveis locais
-	int op;
+	//loop infinito
+	for(;;){
+		//variaveis locais
+		int op;
+		//menu
+		printf("Menu principal\n\n");
+		printf("1 - Inserir\n");
+		printf("2 - Consultar\n");
+		printf("3 - Alterar\n");
+		printf("4 - Deletar\n");
+		printf("5 - Sair\n");
+		printf("\nOpcao> ");
+		scanf("%i", &op);
 	
-	//menu
-	printf("Menu principal\n\n");
-	printf("1 - Inserir\n");
-	printf("2 - Consultar\n");
-	printf("3 - Alterar\n");
-	printf("4 - Deletar\n");
-	printf("5 - Sair\n");
-	printf("\nOpcao> ");
-	scanf("%i", &op);
-	
-	switch(op){
-		case 1:
-			inserir();
-			break;
-		case 2:
-			consultar();
-			break;
-		case 3:
-			alterar();
-			break;
-		case 4:
-			deletar();
-			break;
-		case 5:
-			system("cls");
-			printf("Fim do programa\n\n");
-			break;
-		default:
-			system("cls");
-			printf("ERRO: OPCAO INVALIDA\n\n");
-			//chama a funcao main novamente
-			main();
-	}
+		switch(op){
+			case 1:
+				inserir();
+				break;
+			case 2:
+				consultar();
+				break;
+			case 3:
+				alterar();
+				break;
+			case 4:
+				deletar();
+				break;
+			case 5:
+				system("cls");
+				printf("Fim do programa\n\n");
+				break;
+			default:
+				system("cls");
+				printf("ERRO: OPCAO INVALIDA\n\n");
+				//chama a funcao main novamente
+				return 0;
+		}
+	}//fim do loop infinito
 }
 
 //métodos 
@@ -93,7 +95,7 @@ void inserir(void){
 	system("pause");
 	system("cls");
 	//limpando a tela e voltando para o menu principal
-	main();
+	return;
 }
 
 void consultar(void){
@@ -107,11 +109,11 @@ void alterar(void){
 void deletar(void){
 	system("cls");
 	//RA que o usuario quer deletar
-	int n;
+	int n=0;
 	printf("Digite o RA que deseja deletar: ");
 	scanf("%i", &n);
 	
-	do{
+	while(p->anterior!=NULL){
 		if(p->ra == n){
 			//deleta a struct da memoria
 			free(p);
@@ -119,21 +121,17 @@ void deletar(void){
 			system("pause");
 			system("cls");
 			//limpando a tela e voltando para o menu principal
-			main();
+			return;
 		}
 		
-		//Quando ele nao acha o RA o programa trava.
-		//unica coisa que falta pra finalizar o metodo
-		if (p->anterior==NULL){		
-			printf("\n\n\nERRO 404: RA nao existe no sistema\n");
-			system("pause");
-			system("cls");
-			//limpando a tela e voltando para o menu principal
-			main();
-		}
-		
-		//vai pra proxima struct
 		p = p->anterior;
-	}while(1);
+	}
+	
+	//Se nao entrar no if significa que nao foi encontrado o RA
+	printf("\n\n\nERRO 404: RA nao existe no sistema\n");
+	system("pause");
+	//limpando a tela e voltando para o menu principal
+	system("cls");
+	return;
 }
 
